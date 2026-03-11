@@ -48,6 +48,14 @@ Starter-content aanmaken (veilig; overschrijft niets bestaands):
 npm run sanity:seed
 ```
 
+`sanity:seed` leest automatisch variabelen uit `.env.local`.
+
+Sanity-connectie en required env testen:
+
+```bash
+npm run sanity:check
+```
+
 De Studio is ingericht voor niet-technische redactie met vaste secties:
 - Site-instellingen (singleton)
 - Homepage (singleton)

@@ -8,12 +8,14 @@
     "start": "next start",
     "lint": "eslint",
     "sanity:studio": "sanity dev",
-    "sanity:seed": "node scripts/seed-sanity.mjs"
+    "sanity:seed": "node scripts/seed-sanity.mjs",
+    "sanity:check": "node scripts/check-sanity.mjs"
   },
   "dependencies": {
     "@sanity/client": "^7.17.0",
     "@sanity/vision": "^5.14.1",
     "@studio-freight/lenis": "^1.0.42",
+    "dotenv": "^17.3.1",
     "groq": "^5.14.1",
     "gsap": "^3.14.2",
     "next": "16.1.6",
