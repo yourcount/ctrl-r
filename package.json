@@ -22,7 +22,8 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "sanity": "^5.14.1",
-    "split-type": "^0.3.4"
+    "split-type": "^0.3.4",
+    "styled-components": "^6.3.11"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
