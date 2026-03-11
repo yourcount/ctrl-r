@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ctrl+r | Digitale Vernieuwing voor Cultuur</title>
+    <!-- Favicon - De 'clever' manier met een emoji die past bij ctrl+r -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔄</text></svg>">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script>
+        // Custom configuratie voor Tailwind CSS
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'background': '#F8F5F2', // Warm off-white
+                        'text': '#1a1a1a',       // Diepzwart
+                        'accent': '#B45309',     // Terracotta/Roestbruin
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'serif': ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .title-outline { -webkit-text-stroke: 1px var(--tw-prose-body); color: transparent !important; }
+        .title-liquid { filter: url(#liquid-filter); }
+        .title-grain { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231a1a1a' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); background-clip: text; -webkit-background-clip: text; color: transparent !important; }
+        .title-reflect::after { content: attr(data-text); position: absolute; left: 0; right: 0; bottom: -100%; transform: scaleY(-1); opacity: 0.05; }
+        /* Custom styling voor de range sliders */
+        .range-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 2px; background: rgba(26, 26, 26, 0.2); outline: none; -webkit-transition: .2s; transition: opacity .2s; }
+        .range-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; background: #1a1a1a; border-radius: 50%; cursor: pointer; }
+        .range-slider::-moz-range-thumb { width: 12px; height: 12px; background: #1a1a1a; border-radius: 50%; cursor: pointer; }
+    </style>
+</head>
+<body class="bg-background text-text font-sans antialiased cursor-none">
+
+    <!-- 5. Interactieve Achtergrondlijnen -->
+    <div id="background-lines" class="fixed inset-0 -z-20 pointer-events-none"></div>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="fixed top-0 left-0 w-3 h-3 bg-accent rounded-full pointer-events-none z-50 transition-transform duration-200 ease-out"></div>
+    <div id="cursor-follower" class="fixed top-0 left-0 w-10 h-10 border-2 border-accent rounded-full pointer-events-none z-50 transition-transform duration-500 ease-out flex justify-center items-center"></div>
+
+    <!-- Zwevend Editor Paneel -->
+    <div id="title-editor-panel" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 p-4 bg-background/80 backdrop-blur-sm border border-text/10 rounded-lg w-72 text-left text-xs space-y-4 opacity-0 pointer-events-none transform translate-y-12 transition-all duration-500 ease-out">
+        <div class="space-y-1">
+            <label for="distortion-slider" class="font-semibold">Vloeibaarheid</label>
+            <input type="range" id="distortion-slider" min="0" max="40" value="0" class="range-slider">
+        </div>
+        <div class="space-y-1">
+            <label for="stretch-slider" class="font-semibold">Zwaartekracht</label>
+            <input type="range" id="stretch-slider" min="0.5" max="2" value="1" step="0.01" class="range-slider">
+        </div>
+        <div class="space-y-1">
+            <label for="chaos-slider" class="font-semibold">Chaos</label>
+            <input type="range" id="chaos-slider" min="0" max="10" value="0" class="range-slider">
+        </div>
+        <button id="reset-title-style" class="w-full text-center pt-2 mt-2 border-t border-text/10 text-text/50 hover:text-accent transition-colors">Reset</button>
+    </div>
+
+    <!-- ===== HERO SECTIE ===== -->
+    <header class="relative h-screen min-h-[600px] flex flex-col justify-between p-8 md:p-12 overflow-hidden">
+        <!-- 4. Subtiele Lichtinval -->
+        <div id="light-effect" class="absolute inset-0 -z-10"></div>
+
+        <div class="flex justify-between items-start w-full">
+            <div class="text-lg font-semibold" data-hero-element="header">
+                <!-- 1. Dynamische Begroeting -->
+                <p><span id="greeting"></span>, ik ben ctrl+r</p>
+            </div>
+            <button id="editor-mode-toggle" class="text-sm font-semibold tracking-wider uppercase hover:text-accent transition-colors z-50" data-cursor-hover>Editor Mode</button>
+        </div>
+        <div class="relative w-full max-w-5xl mx-auto text-center py-12" data-hero-element="title-wrapper">
+            <!-- 3. Interactieve Titel-Editor -->
+            <h1 id="interactive-title" class="relative font-serif text-5xl md:text-7xl lg:text-8xl !leading-tight transition-all duration-300">Digitale vernieuwing<br>voor de culturele <span class="whitespace-nowrap">sector.</span></h1>
+        </div>
+        <div class="flex justify-between items-center w-full" data-hero-element="footer">
+            <p class="max-w-xs text-sm">Webdesign en digitale strategie voor de creatieve sector.</p>
+            <!-- 3. & 5. Magnetische & Geanimeerde Scroll Knop -->
+            <a href="#projecten" id="magnetic-link" class="relative w-32 h-32" data-cursor-hover>
+                <svg id="scroll-path-svg" class="absolute inset-0 w-full h-full" viewBox="0 0 100 100"><path id="scroll-path" fill="none" d="M 10,50 A 40,40 0 1 1 90,50 A 40,40 0 1 1 10,50" /><text class="text-xs tracking-wider uppercase fill-current"><textPath href="#scroll-path" startOffset="0">Scroll om te ontdekken • Scroll om te ontdekken •</textPath></text></svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- SVG Filter voor Liquid effect -->
+    <svg class="absolute w-0 h-0">
+        <filter id="liquid-filter"><feTurbulence type="fractalNoise" baseFrequency="0.01 0.03" numOctaves="1" result="warp" /><feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="20" in="SourceGraphic" in2="warp" /></filter>
+    </svg>
+
+    <main>
+        <!-- ===== OVER MIJ SECTIE ===== -->
+        <section id="over" class="max-w-3xl mx-auto px-8 py-24 md:py-32 text-center">
+            <h2 class="font-serif text-3xl md:text-4xl mb-6">Focus op creatie.</h2>
+            <p class="text-lg md:text-xl leading-relaxed mb-6">
+                Als kunstenaar wil je je tijd besteden aan creëren. Ik neem de technische en strategische kant van je online aanwezigheid uit handen, zodat jij je kunt richten op wat essentieel is: je werk.
+            </p>
+            <p class="text-lg md:text-xl leading-relaxed">
+                Ik geloof in de waarde van duurzame samenwerkingen. Daarom werk ik flexibel en niet met vaste tarieven. Voor projecten sta ik open voor een kunstruil als vergoeding, altijd in goed overleg.
+            </p>
+        </section>
+
+        <!-- ===== PROJECTEN SECTIE (HORIZONTALE SCROLL) ===== -->
+        <section id="projecten" class="horizontal-scroll-section bg-text text-background overflow-hidden">
+            <div class="pin-element h-screen flex items-center">
+                <div class="projects-container flex gap-8 md:gap-16 pl-8 md:pl-16">
+                    <!-- Project 1: Florescencism (Pronkstuk) -->
+                    <div class="project-card w-[80vw] md:w-[50vw] lg:w-[40vw] flex-shrink-0" data-cursor-hover>
+                        <a href="https://florescencism.lida.gallery/" target="_blank" rel="noopener noreferrer" class="block group overflow-hidden">
+                            <img src="https://i.imgur.com/uQJqY9c.png" alt="Screenshot van Florescencism project" class="w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </a>
+                        <div class="mt-4">
+                            <h3 class="font-serif text-2xl">Florescencism</h3>
+                            <p class="text-sm mt-1">Interactieve 3D-galerij</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: Yo! Treasure Fest -->
+                    <div class="project-card w-[80vw] md:w-[50vw] lg:w-[40vw] flex-shrink-0" data-cursor-hover>
+                        <a href="https://www.yohotreasurefest.nl/" target="_blank" rel="noopener noreferrer" class="block group overflow-hidden">
+                            <img src="https://i.imgur.com/i9a5n9s.png" alt="Screenshot van Yo! Treasure Fest project" class="w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </a>
+                        <div class="mt-4">
+                            <h3 class="font-serif text-2xl">Yo! Treasure Fest</h3>
+                            <p class="text-sm mt-1">Festival website</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: Nina Lynn -->
+                    <div class="project-card w-[80vw] md:w-[50vw] lg:w-[40vw] flex-shrink-0" data-cursor-hover>
+                        <a href="https://ninalynn.nl/" target="_blank" rel="noopener noreferrer" class="block group overflow-hidden">
+                            <img src="https://i.imgur.com/y8v8F1t.png" alt="Screenshot van Nina Lynn project" class="w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </a>
+                        <div class="mt-4">
+                            <h3 class="font-serif text-2xl">Nina Lynn</h3>
+                            <p class="text-sm mt-1">Artiestenportfolio</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== DIENSTEN SECTIE ===== -->
+        <section id="diensten" class="max-w-5xl mx-auto px-8 py-24 md:py-32">
+            <h2 class="font-serif text-3xl md:text-4xl mb-12 text-center">Mijn Expertise</h2>
+            <div class="grid md:grid-cols-3 gap-10 text-lg">
+                <div class="service-item border-t-2 border-text pt-4">
+                    <h3 class="font-semibold mb-2">01 / Webdesign</h3>
+                    <p class="leading-relaxed">Ik ontwerp en realiseer websites die functioneren als een verlengstuk van je atelier – van een minimalistisch portfolio tot een volledige interactieve expositie.</p>
+                </div>
+                <div class="service-item border-t-2 border-text pt-4">
+                    <h3 class="font-semibold mb-2">02 / Gebruikerservaring</h3>
+                    <p class="leading-relaxed">Een doordachte gebruikerservaring zorgt ervoor dat bezoekers je werk op een intuïtieve manier ontdekken. De focus ligt volledig op de beleving van de kunst.</p>
+                </div>
+                <div class="service-item border-t-2 border-text pt-4">
+                    <h3 class="font-semibold mb-2">03 / Strategie & Beheer</h3>
+                    <p class="leading-relaxed">Als je digitale partner denk ik strategisch met je mee. Ik neem het technisch beheer uit handen, zodat je website altijd veilig en actueel blijft.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== MARQUEE SECTIE ===== -->
+        <section class="marquee-section py-12 bg-background overflow-hidden">
+            <div class="marquee-inner flex whitespace-nowrap">
+                <span class="font-serif text-4xl md:text-5xl px-8">Webdesign</span>
+                <span class="font-serif text-4xl md:text-5xl px-8 text-accent">&bull;</span>
+                <span class="font-serif text-4xl md:text-5xl px-8">User Experience</span>
+                <span class="font-serif text-4xl md:text-5xl px-8 text-accent">&bull;</span>
+                <span class="font-serif text-4xl md:text-5xl px-8">Cultuur & Kunst</span>
+            </div>
+        </section>
+
+        <!-- ===== CONTACT SECTIE ===== -->
+        <footer id="contact" class="bg-text text-background px-8 py-24 md:py-32 text-center">
+            <h2 class="font-serif text-4xl md:text-6xl !leading-tight mb-6">Laten we een gesprek starten.</h2>
+            <p class="max-w-2xl mx-auto text-lg md:text-xl leading-relaxed mb-8">Geïnteresseerd in een samenwerking? Ik hoor graag meer over jou en je werk. Stuur me een bericht om de mogelijkheden te bespreken.</p>
+            <button id="email-button" data-cursor-hover class="bg-background text-text font-semibold py-4 px-8 hover:bg-accent hover:text-background transition-colors duration-300" data-email="jouw-email@voorbeeld.com">
+                t.degraaf13@gmail.com
+            </button>
+            <div id="copy-feedback" class="mt-4 text-accent opacity-0 transition-opacity">E-mailadres gekopieerd!</div>
+        </footer>
+    </main>
+
+    <!-- GSAP voor animaties -->
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Eigen script -->
+    <script src="script.js"></script>
+
+</body>
+</html>

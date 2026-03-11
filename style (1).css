@@ -1,0 +1,317 @@
+/* style.css */
+:root {
+    /* Kleurenpalet */
+    --color-background: #0D0D0D;
+    --color-text: #E0E0E0;
+    --color-heading: #FFFFFF;
+    --color-primary: #FF3B81; /* Levendig roze */
+    --color-secondary: #7D40FF; /* Diep paars */
+    --color-accent: #00D1FF; /* Helder cyaan */
+    --color-glass: rgba(18, 18, 18, 0.6);
+
+    /* Lettertypes */
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Overgangen */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ===== BASIS STIJLEN ===== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    margin: 0;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    color: var(--color-heading);
+    font-weight: 700;
+}
+
+p {
+    line-height: 1.7;
+    max-width: 65ch; /* Betere leesbaarheid */
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--color-accent);
+}
+
+/* ===== AURORA ACHTERGROND ===== */
+.aurora-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at 70% 20%, var(--color-primary) 0%, transparent 50%),
+                radial-gradient(ellipse at 30% 80%, var(--color-secondary) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 90%, var(--color-accent) 0%, transparent 60%);
+    filter: blur(120px);
+    opacity: 0.15;
+    animation: aurora-flow 25s infinite alternate ease-in-out;
+    z-index: -1;
+}
+
+@keyframes aurora-flow {
+    from { transform: rotate(0deg) scale(1); }
+    to { transform: rotate(90deg) scale(1.2); }
+}
+
+/* ===== HERO SECTIE ===== */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    position: relative;
+}
+
+.kinetic-title {
+    font-size: clamp(3.5rem, 12vw, 10rem);
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.05em;
+    color: var(--color-heading);
+    transition: transform 0.4s ease-out;
+    position: relative;
+}
+
+.tagline {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    margin: 0.5rem 0 0 0;
+    color: var(--color-text);
+    opacity: 0.8;
+}
+
+.scroll-down-link {
+    position: absolute;
+    bottom: 2rem;
+    color: var(--color-text);
+    width: 3rem;
+    height: 3rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+/* ===== ALGEMENE CONTENT SECTIE ===== */
+.content-section {
+    padding: 8rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.content-section h2 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    margin-bottom: 2rem;
+}
+
+/* ===== HORIZONTALE SCROLL PROJECTEN ===== */
+.horizontal-scroll-section {
+    height: 100vh; /* Belangrijk voor ScrollTrigger */
+    overflow: hidden;
+}
+
+.pin-element {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.section-header {
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.section-header h3 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1rem;
+}
+
+.projects-container {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    width: max-content; /* Cruciaal voor horizontale scroll */
+}
+
+.project-card {
+    width: 60vw;
+    max-width: 500px;
+    height: 60vh;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform var(--transition-medium);
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+}
+
+.project-card.featured {
+    width: 70vw;
+    max-width: 600px;
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+    background-color: var(--color-glass);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-content h4 {
+    font-size: 1.75rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.card-content p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0 0 1.5rem 0;
+}
+
+.card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.project-card:hover .card-background {
+    transform: scale(1.05);
+}
+
+/* ===== DIENSTEN SECTIE ===== */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    text-align: left;
+    margin-top: 4rem;
+}
+
+.service-item {
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.service-item h3 {
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    margin: 0 0 1rem 0;
+}
+
+/* ===== CONTACT & FOOTER ===== */
+.contact-section {
+    padding: 8rem 2rem;
+    text-align: center;
+    background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+}
+
+.contact-section h2 {
+    font-size: clamp(3rem, 6vw, 4.5rem);
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 0.8rem 1.8rem;
+    border: 1px solid var(--color-primary);
+    border-radius: 50px;
+    color: var(--color-primary);
+    font-weight: 500;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all var(--transition-medium);
+}
+
+.cta-button:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+    transform: scale(1.05);
+    box-shadow: 0 0 25px -5px var(--color-primary);
+}
+
+.cta-button.large {
+    margin-top: 2rem;
+    padding: 1.2rem 3rem;
+    font-size: 1.1rem;
+}
+
+.copy-feedback {
+    margin-top: 1rem;
+    color: var(--color-accent);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.copy-feedback.visible {
+    opacity: 1;
+}
+
+/* ===== RESPONSIVE AANPASSINGEN ===== */
+@media (max-width: 768px) {
+    .horizontal-scroll-section, .pin-element {
+        height: auto; /* Horizontale scroll uitschakelen op mobiel */
+    }
+    .projects-container {
+        flex-direction: column;
+        width: 100%;
+        padding: 1rem;
+    }
+    .project-card, .project-card.featured {
+        width: 100%;
+        height: 50vh;
+    }
+    .content-section, .contact-section {
+        padding: 6rem 1.5rem;
+    }
+}
