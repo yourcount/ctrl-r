@@ -91,7 +91,7 @@ export const fallbackContactInfo: ContactInfo = {
 
 export const fallbackSiteSettings: SiteSettings = {
   siteTitle: "ctrl+r",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ctrl-r-nine.vercel.app",
   organizationName: "ctrl+r",
   organizationDescription:
     "ctrl+r helpt kunstenaars en culturele makers met websites, strategie en duurzaam beheer.",

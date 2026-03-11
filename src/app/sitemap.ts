@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getProjectCases } from "@/lib/content/content-service";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ctrl-r-nine.vercel.app";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const projects = await getProjectCases(false);

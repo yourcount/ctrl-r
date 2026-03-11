@@ -20,7 +20,7 @@ Open [http://localhost:3000](http://localhost:3000).
 Maak een `.env.local` met minimaal:
 
 ```bash
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_URL=https://ctrl-r-nine.vercel.app
 NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
 NEXT_PUBLIC_SANITY_DATASET=production
 SANITY_API_READ_TOKEN=your_read_token
@@ -56,6 +56,12 @@ Sanity-connectie en required env testen:
 npm run sanity:check
 ```
 
+Productie-URL in Sanity `siteSettings` synchroniseren:
+
+```bash
+npm run sanity:sync-site-url:prod
+```
+
 De Studio is ingericht voor niet-technische redactie met vaste secties:
 - Site-instellingen (singleton)
 - Homepage (singleton)
@@ -80,6 +86,13 @@ De Studio is ingericht voor niet-technische redactie met vaste secties:
   `/api/draft/disable`
 
 Gebruik voor `JOUW_SECRET` dezelfde waarde als `SANITY_PREVIEW_SECRET`.
+
+## Automatische Studio deploys
+
+Bij wijzigingen in `src/sanity/**` of `sanity.config.ts` draait GitHub Actions automatisch een `sanity deploy`.
+
+Benodigd:
+- GitHub repository secret `SANITY_AUTH_TOKEN` met deploy-rechten voor project `dxucanzd`.
 
 ## Kwaliteitsbasis
 

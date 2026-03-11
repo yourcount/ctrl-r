@@ -9,7 +9,10 @@
     "lint": "eslint",
     "sanity:studio": "sanity dev",
     "sanity:seed": "node scripts/seed-sanity.mjs",
-    "sanity:check": "node scripts/check-sanity.mjs"
+    "sanity:check": "node scripts/check-sanity.mjs",
+    "sanity:sync-site-url": "node scripts/sync-site-url.mjs",
+    "sanity:sync-site-url:prod": "node scripts/sync-site-url.mjs https://ctrl-r-nine.vercel.app",
+    "sanity:deploy": "sanity deploy -y"
   },
   "dependencies": {
     "@sanity/client": "^7.17.0",
