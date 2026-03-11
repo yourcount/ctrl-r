@@ -1,21 +1,47 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
+  weight: ["700"],
 });
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
-  title: "ctrl+r – Digitale vernieuwing voor cultuur",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "ctrl+r",
+    template: "%s | ctrl+r",
+  },
   description:
     "ctrl+r helpt kunstenaars en culturele makers met doordachte websites, digitale strategie en duurzaam beheer.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "ctrl+r",
+    description:
+      "Digitale vernieuwing voor cultuur met een duidelijke propositie en beheersbare content.",
+    url: siteUrl,
+    siteName: "ctrl+r",
+    locale: "nl_NL",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ctrl+r",
+    description:
+      "Digitale vernieuwing voor cultuur met een duidelijke propositie en beheersbare content.",
+  },
 };
 
 export default function RootLayout({
@@ -25,94 +51,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="nl">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {/* Aurora achtergrond zoals in de originele site */}
-        <div className="aurora-background" />
-        {/* Interactieve achtergrondlijnen en custom cursor containers */}
-        <div id="background-lines" className="fixed inset-0 -z-20 pointer-events-none" />
-        <div
-          id="custom-cursor"
-          className="fixed top-0 left-0 z-50 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--color-accent) pointer-events-none"
-        />
-        <div
-          id="cursor-follower"
-          className="fixed top-0 left-0 z-50 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-(--color-accent) pointer-events-none"
-        />
-        {/* Zwevend editorpaneel voor de titel */}
-        <div
-          id="title-editor-panel"
-          className="fixed bottom-8 left-1/2 z-40 w-72 -translate-x-1/2 translate-y-12 space-y-4 rounded-lg border border-white/10 bg-black/70 p-4 text-left text-xs text-(--color-text) opacity-0 shadow-lg backdrop-blur pointer-events-none"
-        >
-          <div className="space-y-1">
-            <label htmlFor="distortion-slider" className="font-semibold">
-              Vloeibaarheid
-            </label>
-            <input
-              type="range"
-              id="distortion-slider"
-              min={0}
-              max={40}
-              defaultValue={0}
-              className="range-slider"
-            />
+      <body className={`${inter.variable} ${playfair.variable}`}>
+        <a href="#main-content" className="skip-link">
+          Ga naar inhoud
+        </a>
+        <div className="aurora-background" aria-hidden />
+        <header className="site-header">
+          <div className="container header-inner">
+            <Link href="/" className="brand-link">
+              ctrl+r
+            </Link>
+            <nav aria-label="Hoofdnavigatie" className="header-nav">
+              <Link href="/work">Werk</Link>
+              <Link href="/#contact">Contact</Link>
+              <Link href="/studio">Beheer</Link>
+            </nav>
           </div>
-          <div className="space-y-1">
-            <label htmlFor="stretch-slider" className="font-semibold">
-              Zwaartekracht
-            </label>
-            <input
-              type="range"
-              id="stretch-slider"
-              min={0.5}
-              max={2}
-              step={0.01}
-              defaultValue={1}
-              className="range-slider"
-            />
-          </div>
-          <div className="space-y-1">
-            <label htmlFor="chaos-slider" className="font-semibold">
-              Chaos
-            </label>
-            <input
-              type="range"
-              id="chaos-slider"
-              min={0}
-              max={10}
-              defaultValue={0}
-              className="range-slider"
-            />
-          </div>
-          <button
-            id="reset-title-style"
-            className="mt-2 w-full border-t border-white/10 pt-2 text-center text-(--color-text)/70 transition hover:text-(--color-accent)"
-          >
-            Reset
-          </button>
-        </div>
-
-        {/* SVG filter voor liquid effect */}
-        <svg className="absolute h-0 w-0">
-          <filter id="liquid-filter">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.01 0.03"
-              numOctaves={1}
-              result="warp"
-            />
-            <feDisplacementMap
-              xChannelSelector="R"
-              yChannelSelector="G"
-              scale={20}
-              in="SourceGraphic"
-              in2="warp"
-            />
-          </filter>
-        </svg>
-
+        </header>
         {children}
+        <footer className="site-footer">
+          <div className="container">
+            <p>© {new Date().getFullYear()} ctrl+r. Digitale vernieuwing voor cultuur.</p>
+          </div>
+        </footer>
       </body>
     </html>
   );

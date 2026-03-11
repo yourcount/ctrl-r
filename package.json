@@ -6,14 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sanity:studio": "sanity dev"
   },
   "dependencies": {
+    "@sanity/client": "^7.17.0",
+    "@sanity/vision": "^5.14.1",
     "@studio-freight/lenis": "^1.0.42",
+    "groq": "^5.14.1",
     "gsap": "^3.14.2",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "sanity": "^5.14.1",
     "split-type": "^0.3.4"
   },
   "devDependencies": {

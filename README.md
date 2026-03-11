@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ctrl+r site
 
-## Getting Started
+Next.js 16 website voor ctrl+r met:
+- Publieke conversiegerichte website
+- Sanity CMS-beheeromgeving (`/studio`)
+- SEO-routes (`/sitemap.xml`, `/robots.txt`)
+- Draft preview flow
 
-First, run the development server:
+## Snel starten
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Omgevingsvariabelen
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Maak een `.env.local` met minimaal:
 
-## Learn More
+```bash
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+NEXT_PUBLIC_SANITY_DATASET=production
+SANITY_API_READ_TOKEN=your_read_token
+SANITY_PREVIEW_SECRET=choose_a_long_secret
+```
 
-To learn more about Next.js, take a look at the following resources:
+Als Sanity-variabelen ontbreken gebruikt de site automatische fallback-content.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content beheren
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Ga naar `/studio`.
+2. Bewerk content in `Site-instellingen`, `Homepage`, `Dienst`, `Projectcase`, `CTA` en `Contactinformatie`.
+3. Publiceer je wijzigingen.
 
-## Deploy on Vercel
+Lokale editor draaien:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run sanity:studio
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Preview flow
+
+- Preview aanzetten:
+  `/api/draft/enable?secret=JOUW_SECRET&redirect=/`
+- Preview uitzetten:
+  `/api/draft/disable`
+
+Gebruik voor `JOUW_SECRET` dezelfde waarde als `SANITY_PREVIEW_SECRET`.
+
+## Kwaliteitsbasis
+
+- Security headers staan in `next.config.ts`.
+- Structured data (`Organization`, `WebSite`) staat op de homepage.
+- Elke publieke route heeft metadata + canonical.
