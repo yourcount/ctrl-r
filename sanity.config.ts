@@ -7,8 +7,8 @@ import { deskStructure } from "./src/sanity/structure";
 export default defineConfig({
   name: "default",
   title: "ctrl+r CMS",
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "",
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
+  projectId: "dxucanzd",
+  dataset: "production",
   plugins: [structureTool({ structure: deskStructure }), visionTool()],
   schema: {
     types: schemaTypes,
