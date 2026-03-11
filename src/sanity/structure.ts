@@ -1,6 +1,7 @@
 import type { StructureResolver } from "sanity/structure";
 
 const singletonTypes = new Set(["siteSettings", "homePage", "contactInfo"]);
+const customListedTypes = new Set(["cta", "service", "projectCase"]);
 
 function singletonListItem(S: Parameters<StructureResolver>[0], typeName: string, title: string) {
   return S.listItem()
@@ -21,6 +22,9 @@ export const deskStructure: StructureResolver = (S) =>
       S.documentTypeListItem("service").title("Diensten"),
       S.documentTypeListItem("projectCase").title("Projectcases"),
       ...S.documentTypeListItems().filter(
-        (item) => !item.getId() || !singletonTypes.has(item.getId()!),
+        (item) =>
+          !item.getId() ||
+          (!singletonTypes.has(item.getId()!) &&
+            !customListedTypes.has(item.getId()!)),
       ),
     ]);
